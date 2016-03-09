@@ -44,10 +44,8 @@ module Homework
     end
 
     def make_a_comment(owner,repo,number, comment)
-      Github.post("/repos/#{owner},#{repo}, issues/#{number}/comments",
-      header: @headers, body: {body: "#{comment}"}.to_json)
+      Github.post("/repos/#{owner}/#{repo}/issues/#{number}/comments",
+      header: @headers, body: {"body" => "#{comment}"}.to_json)
     end
-
-
   end
 end
