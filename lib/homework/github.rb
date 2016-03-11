@@ -4,9 +4,8 @@ module Homework
     base_uri "https://api.github.com"
 
     def initialize
-      @auth_token = ""
       @headers = {
-        "Authorization" => "token #{@auth_token}",
+        "Authorization" => "token #{ENV["OAUTH_TOKEN"]}",
         "User-Agent"    => "HTTParty"
       }
     end
@@ -45,7 +44,17 @@ module Homework
 
     def make_a_comment(owner,repo,number, comment)
       Github.post("/repos/#{owner}/#{repo}/issues/#{number}/comments",
-      header: @headers, body: {"body" => "#{comment}"}.to_json)
+      header: @headers, body: {"body" => comment}.to_json)
     end
+    def get_gist(id)
+      Github.get("/gists/#{id}", headers: @headers)
+    end
+
+    def create_issue(owner, repo, title, options={})
+      params = options.merge{"title" =>title}).to_json
+      Github.post("/repos/#{owner}/#{repo}/issues", headers: @headers,
+        body: params)
+    end
+
   end
 end
